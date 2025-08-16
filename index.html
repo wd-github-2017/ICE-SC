@@ -1,0 +1,1603 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>国际中文教育例句语料库 ICLESC</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+        
+        .header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        
+        .content {
+            padding: 25px; /* 减少内容区域的内边距 */
+        }
+        
+        .tag-section {
+            margin-bottom: 25px; /* 减少下边距 */
+        }
+        
+        .tag-section h2 {
+            color: #333;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 8px; /* 减少标题下边距 */
+            margin-bottom: 15px; /* 减少标题下边距 */
+        }
+        
+        .tag-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .tag-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .tag-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        
+        .tag-button.active {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            transform: scale(1.05);
+        }
+        
+        .results-section {
+            margin-top: 30px;
+        }
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .results-section h2 {
+            color: #333;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+            margin: 0;
+        }
+        
+        .sort-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+        }
+        
+        .sort-controls label {
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .sort-select {
+            padding: 6px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            background-color: white;
+            cursor: pointer;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+        
+        .sort-select:focus {
+            border-color: #667eea;
+        }
+        
+        .sort-select:hover {
+            border-color: #999;
+        }
+        
+        .result-item {
+            background-color: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .result-item:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        
+        .result-text {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #333;
+            margin-bottom: 10px;
+            white-space: pre-line; /* 允许换行符显示 */
+        }
+        
+        .result-meta {
+            font-size: 12px;
+            color: #666;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+        
+        .result-stats {
+            display: flex;
+            gap: 15px;
+            font-size: 11px;
+        }
+        
+        .result-length, .result-complexity {
+            background-color: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 8px;
+            color: #555;
+        }
+        
+        .result-complexity {
+            background-color: #e3f2fd;
+            color: #1976d2;
+        }
+        
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 10;
+        }
+        
+        .copy-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        
+        .copy-button:active {
+            transform: scale(0.95);
+        }
+        
+        .result-source {
+            background-color: #e9ecef;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+        }
+        
+        .result-id {
+            color: #999;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        
+        .stats {
+            background-color: #e8f4fd;
+            padding: 15px; /* 减少内边距 */
+            border-radius: 8px;
+            margin-bottom: 20px; /* 减少下边距 */
+            border-left: 4px solid #17a2b8;
+        }
+        
+        .stats h3 {
+            margin: 0 0 12px 0; /* 减少标题下边距 */
+            color: #17a2b8;
+            font-size: 16px; /* 稍微减小标题字体 */
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* 减少最小宽度 */
+            gap: 12px; /* 减少间距 */
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 1.6em; /* 减小数字字体 */
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 4px; /* 减少数字和标签的间距 */
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 0.85em; /* 减小标签字体 */
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .search-box {
+            margin-bottom: 15px; /* 减少下边距 */
+        }
+        
+        .search-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 12px 20px;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+        
+        .search-text-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            white-space: nowrap;
+        }
+        
+        .search-text-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        
+        .search-text-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .search-input:focus {
+            border-color: #667eea;
+        }
+        
+        .search-input::placeholder {
+            color: #999;
+        }
+
+        /* New styles for tag layout */
+        .tag-layout {
+            display: grid;
+            grid-template-columns: auto 1fr 1fr; /* 等级栏自适应宽度，其他两栏平分剩余空间 */
+            gap: 20px;
+        }
+
+        .level-column, .grammar-column, .selected-column {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+        }
+        
+        .level-column {
+            min-width: 120px; /* 确保等级选择标题能完整显示 */
+            max-width: 150px; /* 限制最大宽度 */
+        }
+
+        .level-column h3, .grammar-column h3, .selected-column h3 {
+            color: #333;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .level-buttons {
+            display: flex;
+            flex-direction: column; /* 垂直排列 */
+            gap: 8px; /* 减少间距 */
+        }
+        
+        .level-button {
+            padding: 10px 12px; /* 等级按钮稍微大一点 */
+            font-size: 14px;
+            white-space: nowrap; /* 等级按钮文字不换行 */
+        }
+        
+        .grammar-filter-input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 15px;
+            font-size: 13px;
+            outline: none;
+            transition: border-color 0.3s ease;
+            box-sizing: border-box;
+        }
+        
+        .grammar-filter-input:focus {
+            border-color: #667eea;
+        }
+        
+        .grammar-filter-input::placeholder {
+            color: #999;
+        }
+        
+        .grammar-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px; /* 减少间距 */
+            margin-bottom: 20px;
+            max-height: 350px; /* 稍微减少高度，为过滤框留空间 */
+            overflow-y: auto; /* 添加垂直滚动条 */
+            padding-right: 10px; /* 为滚动条留出空间 */
+        }
+        
+        /* 自定义滚动条样式 */
+        .grammar-buttons::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .grammar-buttons::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        
+        .grammar-buttons::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+        
+        .grammar-buttons::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+        .level-button, .grammar-button {
+            background: linear-gradient(135deg, #6a82ec 0%, #6a82ec 100%);
+            color: white;
+            border: none;
+            padding: 8px 16px; /* 减少内边距 */
+            border-radius: 10px; /* 稍微减少圆角 */
+            cursor: pointer;
+            font-size: 13px; /* 稍微减小字体 */
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            max-width: 100%;
+            word-wrap: break-word;
+            white-space: normal;
+            text-align: center;
+            line-height: 1.2; /* 减少行高 */
+            margin-bottom: 6px; /* 减少按钮间距 */
+        }
+
+        .level-button:hover, .grammar-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .level-button.active, .grammar-button.active {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            transform: scale(1.05);
+        }
+
+        .no-selection {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+            font-style: italic;
+        }
+
+        .selected-tags {
+            margin-top: 20px;
+            max-height: 200px; /* Limit height for scrolling */
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        .selected-tag {
+            background-color: #e0f7fa;
+            color: #007bff;
+            padding: 8px 12px;
+            border-radius: 15px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .search-actions {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .search-button, .clear-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .search-button:hover, .clear-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .search-button:disabled, .clear-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .remove-tag {
+            background: #ff4757;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        
+        .remove-tag:hover {
+            background: #ff3742;
+            transform: scale(1.1);
+        }
+        
+        .search-logic-info {
+            background-color: #e3f2fd;
+            border: 1px solid #2196f3;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 13px;
+        }
+        
+        .search-logic-info p {
+            margin: 0 0 10px 0;
+            color: #1976d2;
+            font-weight: bold;
+        }
+        
+        .search-logic-info ul {
+            margin: 0;
+            padding-left: 20px;
+            color: #424242;
+        }
+        
+        .search-logic-info li {
+            margin-bottom: 5px;
+            line-height: 1.4;
+        }
+        
+        .search-logic-info strong {
+            color: #d32f2f;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .tag-layout {
+                grid-template-columns: 1fr; /* 小屏幕时改为单列 */
+                gap: 15px;
+            }
+            
+            .level-column {
+                min-width: auto;
+                max-width: none;
+            }
+            
+            .level-buttons {
+                flex-direction: row; /* 小屏幕时等级按钮水平排列 */
+                flex-wrap: wrap;
+            }
+            
+            .grammar-buttons {
+                max-height: 300px; /* 小屏幕时减少高度 */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>国际中文教育例句语料库 ICLESC</h1>
+            <p>International Chinese Language Education Sentence Corpus</p>
+        </div>
+        
+        <div class="content">
+            <!-- 调试信息 -->
+            <div style="background: #ffeb3b; color: #333; padding: 10px; margin-bottom: 20px; border-radius: 5px; text-align: center; font-weight: bold;">
+                🎉 测试版本 Ver.2025-08-15
+            </div>
+            
+            <div class="stats">
+                <h3>数据统计</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number" id="totalSentences">-</div>
+                        <div class="stat-label">总例句数</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="totalTags">-</div>
+                        <div class="stat-label">收录语法点</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="totalSources">-</div>
+                        <div class="stat-label">收录例句来源</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="search-box">
+                <div class="search-row">
+                    <input type="text" class="search-input" id="searchInput" placeholder="输入关键词进行文本搜索 (支持多个词汇，用空格分隔)">
+                    <button class="search-text-button" id="searchTextButton">🔍 搜索</button>
+                </div>
+            </div>
+            
+            <div class="tag-section">
+                <h2>标签选择</h2>
+                <div class="tag-layout">
+                    <!-- 第一栏：等级选择栏 -->
+                    <div class="level-column">
+                        <h3>等级选择</h3>
+                        <div class="level-buttons" id="levelButtons">
+                            <div class="loading">正在加载等级...</div>
+                        </div>
+                    </div>
+                    
+                    <!-- 第二栏：语法标签选择栏 -->
+                    <div class="grammar-column">
+                        <h3>语法标签选择</h3>
+                        <div class="grammar-filter-box" style="margin-bottom: 15px; display: none;" id="grammarFilterBox">
+                            <input type="text" class="grammar-filter-input" id="grammarFilterInput" placeholder="输入关键词过滤语法标签...">
+                        </div>
+                        <div class="grammar-buttons" id="grammarButtons">
+                            <div class="no-selection">请先选择一个等级</div>
+                        </div>
+                    </div>
+                    
+                    <!-- 第三栏：已选中标签呈现栏 -->
+                    <div class="selected-column">
+                        <h3>已选中标签</h3>
+                        <div class="search-logic-info">
+                            <p><strong>检索逻辑：</strong></p>
+                            <ul>
+                                <li>单个标签：显示包含该标签的文本</li>
+                                <li>多个标签：显示<strong>同时包含所有标签</strong>的文本（AND关系）</li>
+                            </ul>
+                        </div>
+                        <div class="selected-tags" id="selectedTags">
+                            <div class="no-selection">暂无选中的标签</div>
+                        </div>
+                        <div class="search-actions">
+                            <button class="search-button" id="searchButton" disabled>
+                                🔍 检索
+                            </button>
+                            <button class="clear-button" id="clearButton" disabled>
+                                🗑️ 清空
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="results-section">
+                <div class="results-header">
+                    <h2>检索结果</h2>
+                    <div class="sort-controls" id="sortControls" style="display: none;">
+                        <label for="sortSelect">排序方式：</label>
+                        <select id="sortSelect" class="sort-select">
+                            <option value="complexity-length-asc" selected>默认排序（复杂度↑+字数↑）</option>
+                            <option value="length-asc">按照字数升序排序</option>
+                            <option value="length-desc">按照字数降序排序</option>
+                            <option value="complexity-asc">按照语法复杂度升序</option>
+                            <option value="complexity-desc">按照语法复杂度降序</option>
+                            <option value="default">原始顺序</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="results">
+                    <div class="no-results">请选择一个标签查看对应的文本内容</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class CorpusFrontend {
+            constructor() {
+                this.data = [];
+                this.tags = new Set();
+                this.sources = new Set();
+                this.levels = new Set(); // 等级集合
+                this.levelTags = new Map(); // 等级到标签的映射
+                this.selectedTags = new Set(); // 已选中的标签
+                this.currentLevel = null; // 当前选中的等级
+                this.tagMapping = new Map(); // 标签映射缓存
+                this.currentResults = []; // 当前的检索结果
+                this.currentSortMethod = 'complexity-length-asc'; // 当前的排序方式：语法复杂度最小+字数最少
+                this.init();
+            }
+            
+            async init() {
+                try {
+                    console.log('🚀 开始初始化语料库前端系统...');
+                    console.log('📅 版本: 三栏布局版本');
+                    
+                    await this.loadData();
+                    await this.loadTagMapping(); // 加载标签映射
+                    this.extractTags();
+                    this.renderLevels();
+                    this.renderSelectedTags(); // 初始化已选中标签显示
+                    this.updateStats(); // 在标签映射加载完成后更新统计
+                    this.bindEvents();
+                    
+                    console.log('✅ 初始化完成！');
+                } catch (error) {
+                    console.error('❌ 初始化失败:', error);
+                    this.showError('数据加载失败，请检查文件路径');
+                }
+            }
+            
+            async loadData() {
+                console.log('开始加载数据...');
+                
+                try {
+                    // 首先加载数据索引
+                    const indexResponse = await fetch('corpus-data/data-index.json');
+                    if (!indexResponse.ok) {
+                        throw new Error('无法加载数据索引文件');
+                    }
+                    
+                    const indexData = await indexResponse.json();
+                    console.log('数据索引加载成功，找到文件:', indexData.total_files);
+                    
+                    // 加载所有数据文件
+                    this.data = [];
+                    let totalLoaded = 0;
+                    
+                    for (const fileInfo of indexData.files) {
+                        if (fileInfo.error) {
+                            console.warn(`跳过损坏的文件: ${fileInfo.filename}`);
+                            continue;
+                        }
+                        
+                        try {
+                            console.log(`正在加载: ${fileInfo.filename}...`);
+                            const response = await fetch(fileInfo.path);
+                            if (!response.ok) {
+                                console.warn(`无法加载文件: ${fileInfo.filename}`);
+                                continue;
+                            }
+                            
+                            const fileData = await response.json();
+                            if (Array.isArray(fileData)) {
+                                this.data = this.data.concat(fileData);
+                                totalLoaded += fileData.length;
+                                console.log(`✅ ${fileInfo.filename}: ${fileData.length} 条数据`);
+                            } else {
+                                console.warn(`文件格式不正确: ${fileInfo.filename}`);
+                            }
+                        } catch (error) {
+                            console.error(`加载文件失败 ${fileInfo.filename}:`, error);
+                        }
+                    }
+                    
+                    console.log('数据加载完成，总数据条数:', this.data.length);
+                    console.log('前5条数据示例:', this.data.slice(0, 5));
+                    
+                    if (this.data.length === 0) {
+                        throw new Error('没有找到有效的数据文件');
+                    }
+                    
+                } catch (error) {
+                    console.error('数据加载失败:', error);
+                    throw error;
+                }
+            }
+            
+            async loadTagMapping() {
+                console.log('开始加载标签映射...');
+                try {
+                    const response = await fetch('config/tag-mapping.json');
+                    if (!response.ok) {
+                        throw new Error('无法加载标签映射文件');
+                    }
+                    const mapping = await response.json();
+                    this.tagMapping = new Map(Object.entries(mapping));
+                    console.log('✅ 标签映射加载完成，映射数量:', this.tagMapping.size);
+                    console.log('📝 标签映射示例:', Array.from(this.tagMapping.entries()).slice(0, 5));
+                } catch (error) {
+                    console.warn('⚠️ 标签映射加载失败，将使用默认标签显示:', error.message);
+                    this.tagMapping = new Map(); // 清空映射
+                }
+            }
+            
+            getTagDescription(tag) {
+                // 获取标签的描述，如果没有映射则返回原标签
+                return this.tagMapping.get(tag) || tag;
+            }
+
+            extractTags() {
+                console.log('开始提取标签...');
+                console.log('数据总条数:', this.data.length);
+                
+                this.data.forEach((item, index) => {
+                    if (item['T-tag']) {
+                        console.log(`第${index}条数据T-tag:`, item['T-tag']);
+                        const tags = item['T-tag'].split(',').map(tag => tag.trim());
+                        console.log(`解析后的标签:`, tags);
+                        tags.forEach(tag => {
+                            this.tags.add(tag);
+                            // 提取等级（第一位数字）
+                            const level = tag.charAt(0);
+                            this.levels.add(level);
+                            
+                            // 建立等级到标签的映射
+                            if (!this.levelTags.has(level)) {
+                                this.levelTags.set(level, new Set());
+                            }
+                            this.levelTags.get(level).add(tag);
+                        });
+                    }
+                    if (item.source) {
+                        this.sources.add(item.source);
+                    }
+                });
+                
+                console.log('提取到的所有标签:', Array.from(this.tags));
+                console.log('标签总数:', this.tags.size);
+                console.log('提取到的等级:', Array.from(this.levels));
+                console.log('等级到标签的映射:', Object.fromEntries(
+                    Array.from(this.levelTags.entries()).map(([level, tags]) => 
+                        [level, Array.from(tags)]
+                    )
+                ));
+            }
+            
+            renderLevels() {
+                const levelButtons = document.getElementById('levelButtons');
+                const sortedLevels = Array.from(this.levels).sort((a, b) => parseInt(a) - parseInt(b));
+                
+                const levelButtonsHtml = sortedLevels.map(level => 
+                    `<button class="level-button" data-level="${level}">${level}级语法</button>`
+                ).join('');
+                
+                // 添加"全部等级"按钮
+                const allLevelsButton = `<button class="level-button" data-level="all">全部等级</button>`;
+                
+                levelButtons.innerHTML = levelButtonsHtml + allLevelsButton;
+            }
+            
+            renderGrammarTags(level, filterText = '') {
+                const grammarButtons = document.getElementById('grammarButtons');
+                const grammarFilterBox = document.getElementById('grammarFilterBox');
+                
+                if (!level) {
+                    grammarButtons.innerHTML = '<div class="no-selection">请先选择一个等级</div>';
+                    grammarFilterBox.style.display = 'none';
+                    return;
+                }
+                
+                let tags = [];
+                if (level === 'all') {
+                    // 显示所有标签
+                    tags = Array.from(this.tags).sort((a, b) => parseInt(a) - parseInt(b));
+                } else if (this.levelTags.has(level)) {
+                    // 显示指定等级的标签
+                    tags = Array.from(this.levelTags.get(level)).sort((a, b) => parseInt(a) - parseInt(b));
+                } else {
+                    grammarButtons.innerHTML = '<div class="no-selection">请先选择一个等级</div>';
+                    grammarFilterBox.style.display = 'none';
+                    return;
+                }
+                
+                // 显示过滤框
+                grammarFilterBox.style.display = 'block';
+                
+                // 应用过滤
+                if (filterText.trim()) {
+                    tags = tags.filter(tag => {
+                        const description = this.getTagDescription(tag);
+                        return description.toLowerCase().includes(filterText.toLowerCase()) ||
+                               tag.toLowerCase().includes(filterText.toLowerCase());
+                    });
+                }
+                
+                if (tags.length === 0) {
+                    grammarButtons.innerHTML = '<div class="no-selection">没有匹配的语法标签</div>';
+                    return;
+                }
+                
+                grammarButtons.innerHTML = tags.map(tag => {
+                    const description = this.getTagDescription(tag);
+                    return `<button class="grammar-button" data-tag="${tag}" title="${description}">${description}</button>`;
+                }).join('');
+                
+                // 重新应用已选中状态
+                this.selectedTags.forEach(selectedTag => {
+                    const button = document.querySelector(`[data-tag="${selectedTag}"]`);
+                    if (button) {
+                        button.classList.add('active');
+                    }
+                });
+            }
+            
+            renderSelectedTags() {
+                const selectedTagsContainer = document.getElementById('selectedTags');
+                const searchButton = document.getElementById('searchButton');
+                const clearButton = document.getElementById('clearButton');
+                
+                if (this.selectedTags.size === 0) {
+                    selectedTagsContainer.innerHTML = '<div class="no-selection">暂无选中的标签</div>';
+                    searchButton.disabled = true;
+                    clearButton.disabled = true;
+                } else {
+                    const tagsHtml = Array.from(this.selectedTags).sort().map(tag => {
+                        const description = this.getTagDescription(tag);
+                        return `
+                            <div class="selected-tag">
+                                <span title="${tag}">${description}</span>
+                                <button class="remove-tag" data-tag="${tag}" onclick="corpusFrontend.removeTag('${tag}')">×</button>
+                            </div>
+                        `;
+                    }).join('');
+                    selectedTagsContainer.innerHTML = tagsHtml;
+                    searchButton.disabled = false;
+                    clearButton.disabled = false;
+                }
+            }
+            
+            updateStats() {
+                // 总例句数
+                document.getElementById('totalSentences').textContent = this.data.length;
+                
+                // 收录语法点：计算标签的type数（通过标签映射文件中的标签数量）
+                const grammarPoints = this.tagMapping.size;
+                document.getElementById('totalTags').textContent = grammarPoints;
+                
+                // 收录例句来源：统计Source字段的种类数量
+                const uniqueSources = new Set();
+                this.data.forEach(item => {
+                    if (item.source && item.source.trim()) {
+                        uniqueSources.add(item.source.trim());
+                    }
+                });
+                const sourceCount = uniqueSources.size;
+                document.getElementById('totalSources').textContent = sourceCount;
+                
+                console.log('📊 统计信息更新:');
+                console.log(`  - 总例句数: ${this.data.length}`);
+                console.log(`  - 收录语法点: ${grammarPoints}`);
+                console.log(`  - 收录例句来源: ${sourceCount}`);
+                console.log(`  - 例句来源详情:`, Array.from(uniqueSources));
+            }
+            
+            bindEvents() {
+                console.log('开始绑定事件...');
+                
+                // 等级按钮点击事件
+                const levelButtonsContainer = document.getElementById('levelButtons');
+                console.log('等级按钮容器:', levelButtonsContainer);
+                
+                levelButtonsContainer.addEventListener('click', (e) => {
+                    console.log('点击事件触发:', e.target);
+                    if (e.target.classList.contains('level-button')) {
+                        const level = e.target.dataset.level;
+                        console.log('点击的等级:', level);
+                        this.selectLevel(level);
+                    }
+                });
+                
+                // 语法标签按钮点击事件
+                const grammarButtonsContainer = document.getElementById('grammarButtons');
+                console.log('语法标签按钮容器:', grammarButtonsContainer);
+                
+                grammarButtonsContainer.addEventListener('click', (e) => {
+                    console.log('点击事件触发:', e.target);
+                    if (e.target.classList.contains('grammar-button')) {
+                        const tag = e.target.dataset.tag;
+                        console.log('点击的语法标签:', tag);
+                        this.toggleTag(tag);
+                    }
+                });
+                
+                // 语法标签过滤框事件
+                const grammarFilterInput = document.getElementById('grammarFilterInput');
+                grammarFilterInput.addEventListener('input', (e) => {
+                    const filterText = e.target.value;
+                    this.renderGrammarTags(this.currentLevel, filterText);
+                });
+                
+                // 排序下拉框事件
+                const sortSelect = document.getElementById('sortSelect');
+                sortSelect.addEventListener('change', (e) => {
+                    this.currentSortMethod = e.target.value;
+                    this.applySortToCurrentResults();
+                });
+                
+                // 检索按钮点击事件
+                const searchButton = document.getElementById('searchButton');
+                searchButton.addEventListener('click', () => {
+                    this.performSearch();
+                });
+                
+                // 清空按钮点击事件
+                const clearButton = document.getElementById('clearButton');
+                clearButton.addEventListener('click', () => {
+                    this.clearSelectedTags();
+                });
+                
+                // 文本搜索框事件
+                const searchInput = document.getElementById('searchInput');
+                const searchTextButton = document.getElementById('searchTextButton');
+                console.log('搜索输入框:', searchInput);
+                
+                // 文本搜索按钮点击事件
+                searchTextButton.addEventListener('click', () => {
+                    this.handleTextSearch(searchInput.value);
+                });
+                
+                // 回车键搜索
+                searchInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        this.handleTextSearch(searchInput.value);
+                    }
+                });
+                
+                // 输入框内容变化时清空结果
+                searchInput.addEventListener('input', (e) => {
+                    if (!e.target.value.trim()) {
+                        this.clearResults();
+                    }
+                });
+                
+                console.log('事件绑定完成');
+            }
+            
+            selectLevel(level) {
+                // 移除之前的等级活跃状态
+                document.querySelectorAll('.level-button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // 设置当前等级为活跃状态
+                const button = document.querySelector(`[data-level="${level}"]`);
+                if (button) {
+                    button.classList.add('active');
+                }
+                
+                this.currentLevel = level;
+                
+                // 清空过滤框
+                const grammarFilterInput = document.getElementById('grammarFilterInput');
+                if (grammarFilterInput) {
+                    grammarFilterInput.value = '';
+                }
+                
+                this.renderGrammarTags(level);
+                this.renderSelectedTags(); // 重新渲染已选中标签
+            }
+            
+            toggleTag(tag) {
+                const tagButton = document.querySelector(`[data-tag="${tag}"]`);
+                if (tagButton) {
+                    if (this.selectedTags.has(tag)) {
+                        tagButton.classList.remove('active');
+                        this.selectedTags.delete(tag);
+                    } else {
+                        tagButton.classList.add('active');
+                        this.selectedTags.add(tag);
+                    }
+                }
+                this.renderSelectedTags();
+            }
+            
+            removeTag(tag) {
+                // 从已选中标签中移除
+                this.selectedTags.delete(tag);
+                
+                // 移除按钮的活跃状态
+                const tagButton = document.querySelector(`[data-tag="${tag}"]`);
+                if (tagButton) {
+                    tagButton.classList.remove('active');
+                }
+                
+                // 重新渲染
+                this.renderSelectedTags();
+            }
+            
+            performSearch() {
+                if (this.selectedTags.size === 0) {
+                    this.showError('请至少选择一个标签进行检索');
+                    return;
+                }
+                
+                // 如果有多个标签，显示所有标签的检索结果
+                if (this.selectedTags.size === 1) {
+                    const tag = this.selectedTags.values().next().value;
+                    this.displayResults(tag);
+                } else {
+                    // 多个标签的情况，显示所有标签的检索结果
+                    const tags = Array.from(this.selectedTags).sort();
+                    this.displayMultipleResults(tags);
+                }
+            }
+            
+            clearSelectedTags() {
+                // 清空等级选择
+                document.querySelectorAll('.level-button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // 清空语法标签选择
+                document.querySelectorAll('.grammar-button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // 清空已选中的标签
+                this.selectedTags.clear();
+                this.currentLevel = null;
+                
+                // 清空过滤框
+                const grammarFilterInput = document.getElementById('grammarFilterInput');
+                if (grammarFilterInput) {
+                    grammarFilterInput.value = '';
+                }
+                
+                // 重新渲染
+                this.renderGrammarTags(null);
+                this.renderSelectedTags();
+                this.clearResults();
+            }
+            
+            selectTag(tag) {
+                // 移除之前的活跃状态
+                document.querySelectorAll('.tag-button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // 设置当前标签为活跃状态
+                const button = document.querySelector(`[data-tag="${tag}"]`);
+                if (button) {
+                    button.classList.add('active');
+                }
+                
+                this.currentTag = tag;
+                document.getElementById('searchInput').value = tag;
+                this.displayResults(tag);
+            }
+            
+            handleTextSearch(query) {
+                if (!query.trim()) {
+                    this.clearResults();
+                    return;
+                }
+                
+                // 清除所有标签选择状态
+                this.clearSelectedTags();
+                
+                const keywords = query.trim().split(/\s+/); // 按空格分割关键词
+                console.log(`开始文本搜索，关键词: ${keywords.join(', ')}`);
+                
+                const results = this.data.filter(item => {
+                    if (!item.text) {
+                        return false;
+                    }
+                    
+                    const text = item.text.toLowerCase();
+                    // 检查是否包含所有关键词（不限制顺序）
+                    const hasAllKeywords = keywords.every(keyword => 
+                        text.includes(keyword.toLowerCase())
+                    );
+                    
+                    return hasAllKeywords;
+                });
+                
+                console.log(`文本搜索结果数量: ${results.length}`);
+                this.renderTextSearchResults(results, keywords);
+            }
+            
+            displayResults(tag) {
+                console.log(`开始搜索标签: ${tag}`);
+                console.log(`当前数据总条数: ${this.data.length}`);
+                
+                const results = this.data.filter(item => {
+                    if (!item['T-tag']) {
+                        console.log(`跳过无T-tag的数据:`, item.sentence_id);
+                        return false;
+                    }
+                    
+                    const tags = item['T-tag'].split(',').map(t => t.trim());
+                    const hasTag = tags.includes(tag);
+                    if (hasTag) {
+                        console.log(`找到匹配数据:`, item.sentence_id, `标签:`, tags);
+                    }
+                    return hasTag;
+                });
+                
+                console.log(`标签 ${tag} 的搜索结果数量:`, results.length);
+                this.renderResults(results, tag);
+            }
+            
+            displayMultipleResults(tags) {
+                console.log(`开始搜索多个标签（AND关系）: ${tags.join(', ')}`);
+                console.log(`当前数据总条数: ${this.data.length}`);
+                console.log(`要求：文本必须同时包含所有选中的标签`);
+                
+                const results = this.data.filter(item => {
+                    if (!item['T-tag']) {
+                        return false;
+                    }
+                    
+                    const itemTags = item['T-tag'].split(',').map(t => t.trim());
+                    // 检查是否同时包含所有选中的标签（AND关系）
+                    const hasAllTags = tags.every(tag => itemTags.includes(tag));
+                    if (hasAllTags) {
+                        console.log(`找到匹配数据:`, item.sentence_id, `标签:`, itemTags);
+                    }
+                    return hasAllTags;
+                });
+                
+                console.log(`多个标签（AND关系）的搜索结果数量:`, results.length);
+                this.renderMultipleResults(results, tags);
+            }
+            
+            renderResults(results, tag) {
+                const resultsContainer = document.getElementById('results');
+                
+                if (results.length === 0) {
+                    const description = this.getTagDescription(tag);
+                    resultsContainer.innerHTML = `
+                        <div class="no-results">
+                            标签 "${description}" 没有找到匹配的文本内容
+                        </div>
+                    `;
+                    this.clearResults();
+                    return;
+                }
+                
+                // 存储当前结果并应用排序
+                this.currentResults = results;
+                const sortedResults = this.sortResults([...results], this.currentSortMethod);
+                const resultsHtml = this.renderSortedResults(sortedResults);
+                
+                const description = this.getTagDescription(tag);
+                resultsContainer.innerHTML = `
+                    <h3>标签 "${description}" 的检索结果 (共 ${results.length} 条)</h3>
+                    ${resultsHtml}
+                `;
+                
+                // 显示排序控件
+                const sortControls = document.getElementById('sortControls');
+                if (sortControls) {
+                    sortControls.style.display = 'flex';
+                }
+            }
+            
+            renderMultipleResults(results, tags) {
+                const resultsContainer = document.getElementById('results');
+                
+                if (results.length === 0) {
+                    const descriptions = tags.map(tag => this.getTagDescription(tag));
+                    resultsContainer.innerHTML = `
+                        <div class="no-results">
+                            标签 "${descriptions.join(', ')}" 没有找到匹配的文本内容
+                        </div>
+                    `;
+                    this.clearResults();
+                    return;
+                }
+                
+                // 存储当前结果并应用排序
+                this.currentResults = results;
+                const sortedResults = this.sortResults([...results], this.currentSortMethod);
+                const resultsHtml = this.renderSortedResults(sortedResults);
+                
+                const descriptions = tags.map(tag => this.getTagDescription(tag));
+                resultsContainer.innerHTML = `
+                    <h3>标签 "${descriptions.join(' AND ')}" 的检索结果 (共 ${results.length} 条)</h3>
+                    <p><em>要求：文本必须同时包含所有选中的标签</em></p>
+                    ${resultsHtml}
+                `;
+                
+                // 显示排序控件
+                const sortControls = document.getElementById('sortControls');
+                if (sortControls) {
+                    sortControls.style.display = 'flex';
+                }
+            }
+            
+            renderTextSearchResults(results, keywords) {
+                const resultsContainer = document.getElementById('results');
+                
+                if (results.length === 0) {
+                    resultsContainer.innerHTML = `
+                        <div class="no-results">
+                            关键词 "${keywords.join('、')}" 没有找到匹配的文本内容
+                        </div>
+                    `;
+                    this.clearResults();
+                    return;
+                }
+                
+                // 存储当前结果并应用排序
+                this.currentResults = results;
+                const sortedResults = this.sortResults([...results], this.currentSortMethod);
+                
+                const resultsHtml = sortedResults.map((item, index) => {
+                    // 高亮显示关键词
+                    let highlightedText = item.text;
+                    keywords.forEach(keyword => {
+                        const regex = new RegExp(`(${keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+                        highlightedText = highlightedText.replace(regex, '<mark style="background-color: #ffeb3b; padding: 1px 2px;">$1</mark>');
+                    });
+                    
+                    const escapedSource = this.escapeHtml(item.source);
+                    const complexity = this.getGrammarComplexity(item);
+                    const textLength = (item.text || '').length;
+                    
+                    return `
+                        <div class="result-item">
+                            <button class="copy-button" onclick="corpusFrontend.copyText(\`${item.text.replace(/`/g, '\\`')}\`, \`${item.source.replace(/`/g, '\\`')}\`)">📋 复制</button>
+                            <div class="result-text">${highlightedText}</div>
+                            <div class="result-meta">
+                                <div class="result-stats">
+                                    <span class="result-length">字数: ${textLength}</span>
+                                    <span class="result-complexity">语法复杂度: ${complexity}</span>
+                                </div>
+                                <span class="result-source">${escapedSource}</span>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                
+                resultsContainer.innerHTML = `
+                    <h3>关键词 "${keywords.join('、')}" 的文本搜索结果 (共 ${results.length} 条)</h3>
+                    <p><em>要求：文本必须同时包含所有关键词（不限制顺序）</em></p>
+                    ${resultsHtml}
+                `;
+                
+                // 显示排序控件
+                const sortControls = document.getElementById('sortControls');
+                if (sortControls) {
+                    sortControls.style.display = 'flex';
+                }
+            }
+            
+            clearResults() {
+                document.getElementById('results').innerHTML = 
+                    '<div class="no-results">请选择一个标签查看对应的文本内容</div>';
+                
+                // 隐藏排序控件
+                const sortControls = document.getElementById('sortControls');
+                if (sortControls) {
+                    sortControls.style.display = 'none';
+                }
+                
+                // 重置排序方式
+                this.currentSortMethod = 'complexity-length-asc';
+                const sortSelect = document.getElementById('sortSelect');
+                if (sortSelect) {
+                    sortSelect.value = 'complexity-length-asc';
+                }
+                
+                // 清空当前结果
+                this.currentResults = [];
+            }
+            
+            applySortToCurrentResults() {
+                if (this.currentResults.length === 0) {
+                    return;
+                }
+                
+                const sortedResults = this.sortResults([...this.currentResults], this.currentSortMethod);
+                const resultsHtml = this.renderSortedResults(sortedResults);
+                
+                // 获取当前的标题和说明文本
+                const resultsContainer = document.getElementById('results');
+                const currentHTML = resultsContainer.innerHTML;
+                const titleMatch = currentHTML.match(/<h3[^>]*>(.*?)<\/h3>/);
+                const descMatch = currentHTML.match(/<p[^>]*><em>(.*?)<\/em><\/p>/);
+                
+                let newHTML = '';
+                if (titleMatch) {
+                    newHTML += `<h3>${titleMatch[1]}</h3>`;
+                }
+                if (descMatch) {
+                    newHTML += `<p><em>${descMatch[1]}</em></p>`;
+                }
+                newHTML += resultsHtml;
+                
+                resultsContainer.innerHTML = newHTML;
+            }
+            
+            sortResults(results, sortMethod) {
+                if (sortMethod === 'default') {
+                    return results;
+                }
+                
+                return results.sort((a, b) => {
+                    switch (sortMethod) {
+                        case 'complexity-length-asc':
+                            // 默认排序：先按语法复杂度升序，再按字数升序
+                            const aComplexity = this.getGrammarComplexity(a);
+                            const bComplexity = this.getGrammarComplexity(b);
+                            
+                            // 首先比较语法复杂度
+                            if (aComplexity !== bComplexity) {
+                                return aComplexity - bComplexity;
+                            }
+                            
+                            // 语法复杂度相同时，按字数升序
+                            return (a.text || '').length - (b.text || '').length;
+                            
+                        case 'length-asc':
+                            // 按字数升序
+                            return (a.text || '').length - (b.text || '').length;
+                            
+                        case 'length-desc':
+                            // 按字数降序
+                            return (b.text || '').length - (a.text || '').length;
+                            
+                        case 'complexity-asc':
+                            // 按语法复杂度升序（T-tag数量）
+                            const aComplexityAsc = this.getGrammarComplexity(a);
+                            const bComplexityAsc = this.getGrammarComplexity(b);
+                            return aComplexityAsc - bComplexityAsc;
+                            
+                        case 'complexity-desc':
+                            // 按语法复杂度降序（T-tag数量）
+                            const aComplexityDesc = this.getGrammarComplexity(a);
+                            const bComplexityDesc = this.getGrammarComplexity(b);
+                            return bComplexityDesc - aComplexityDesc;
+                            
+                        default:
+                            return 0;
+                    }
+                });
+            }
+            
+            getGrammarComplexity(item) {
+                // 计算语法复杂度（T-tag的数量）
+                if (!item['T-tag']) {
+                    return 0;
+                }
+                const tags = item['T-tag'].split(',').map(t => t.trim()).filter(t => t.length > 0);
+                return tags.length;
+            }
+            
+            renderSortedResults(results) {
+                // 存储当前结果
+                this.currentResults = results;
+                
+                // 显示排序控件
+                const sortControls = document.getElementById('sortControls');
+                if (sortControls && results.length > 0) {
+                    sortControls.style.display = 'flex';
+                }
+                
+                // 生成结果HTML
+                const resultsHtml = results.map((item, index) => {
+                    const escapedSource = this.escapeHtml(item.source);
+                    const complexity = this.getGrammarComplexity(item);
+                    const textLength = (item.text || '').length;
+                    
+                    return `
+                        <div class="result-item">
+                            <button class="copy-button" onclick="corpusFrontend.copyText(\`${item.text.replace(/`/g, '\\`')}\`, \`${item.source.replace(/`/g, '\\`')}\`)">📋 复制</button>
+                            <div class="result-text">${item.text}</div>
+                            <div class="result-meta">
+                                <div class="result-stats">
+                                    <span class="result-length">字数: ${textLength}</span>
+                                    <span class="result-complexity">语法复杂度: ${complexity}</span>
+                                </div>
+                                <span class="result-source">${escapedSource}</span>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                
+                return resultsHtml;
+            }
+            
+            escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+            
+            showError(message) {
+                document.getElementById('results').innerHTML = `
+                    <div class="no-results" style="color: #dc3545;">
+                        ${message}
+                    </div>
+                `;
+            }
+            
+            copyText(text, source) {
+                try {
+                    // 构建要复制的文本：text内容 + （source内容）
+                    const textToCopy = `${text}\n（${source}）`;
+                    
+                    // 使用现代的 Clipboard API
+                    if (navigator.clipboard && window.isSecureContext) {
+                        navigator.clipboard.writeText(textToCopy).then(() => {
+                            this.showCopySuccess();
+                        }).catch(() => {
+                            this.fallbackCopyText(textToCopy);
+                        });
+                    } else {
+                        // 降级到旧的方法
+                        this.fallbackCopyText(textToCopy);
+                    }
+                } catch (error) {
+                    console.error('复制失败:', error);
+                    this.showCopyError();
+                }
+            }
+            
+            fallbackCopyText(text) {
+                try {
+                    // 创建临时的textarea元素
+                    const textArea = document.createElement('textarea');
+                    textArea.value = text;
+                    textArea.style.position = 'fixed';
+                    textArea.style.left = '-999999px';
+                    textArea.style.top = '-999999px';
+                    document.body.appendChild(textArea);
+                    textArea.focus();
+                    textArea.select();
+                    
+                    const result = document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    
+                    if (result) {
+                        this.showCopySuccess();
+                    } else {
+                        this.showCopyError();
+                    }
+                } catch (error) {
+                    console.error('降级复制方法也失败:', error);
+                    this.showCopyError();
+                }
+            }
+            
+            showCopySuccess() {
+                // 创建临时的成功提示
+                const toast = document.createElement('div');
+                toast.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: #28a745;
+                    color: white;
+                    padding: 10px 20px;
+                    border-radius: 5px;
+                    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+                    z-index: 10000;
+                    font-size: 14px;
+                `;
+                toast.textContent = '✓ 已复制到剪贴板';
+                document.body.appendChild(toast);
+                
+                // 3秒后自动移除
+                setTimeout(() => {
+                    if (document.body.contains(toast)) {
+                        document.body.removeChild(toast);
+                    }
+                }, 3000);
+            }
+            
+            showCopyError() {
+                // 创建临时的错误提示
+                const toast = document.createElement('div');
+                toast.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: #dc3545;
+                    color: white;
+                    padding: 10px 20px;
+                    border-radius: 5px;
+                    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+                    z-index: 10000;
+                    font-size: 14px;
+                `;
+                toast.textContent = '✗ 复制失败，请手动复制';
+                document.body.appendChild(toast);
+                
+                // 3秒后自动移除
+                setTimeout(() => {
+                    if (document.body.contains(toast)) {
+                        document.body.removeChild(toast);
+                    }
+                }, 3000);
+            }
+        }
+        
+        // 初始化应用
+        document.addEventListener('DOMContentLoaded', () => {
+            window.corpusFrontend = new CorpusFrontend();
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,30 @@
+{
+  "generated_at": 1755333749,
+  "total_files": 2,
+  "files": [
+    {
+      "filename": "ShiJieHanYuJiaoXue-GF0025-2021-4th-Korea_processed_20250816_180819.json",
+      "path": "corpus-data/ShiJieHanYuJiaoXue-GF0025-2021-4th-Korea_processed_20250816_180819.json",
+      "size": 510043,
+      "modified": 1755335299.0182931,
+      "count": 2312,
+      "has_sentence_id": true,
+      "has_text": true,
+      "has_source": true,
+      "has_t_tag": true,
+      "has_f_tag": true
+    },
+    {
+      "filename": "prompts_sentences_split_result_20250814_221416_encoded_processed.json",
+      "path": "corpus-data/prompts_sentences_split_result_20250814_221416_encoded_processed.json",
+      "size": 1823152,
+      "modified": 1755335257.0578518,
+      "count": 6640,
+      "has_sentence_id": true,
+      "has_text": true,
+      "has_source": true,
+      "has_t_tag": true,
+      "has_f_tag": true
+    }
+  ]
+}
