@@ -1,4 +1,5 @@
-# 中文语法语料库检索系统
+# 国际中文教育例句语料库 ICE-SC
+International Chinese Language Education Sentence Corpus
 
 🔗 **在线访问**: https://wd-github-2017.github.io/ICE-SC/
 ## 功能特点
