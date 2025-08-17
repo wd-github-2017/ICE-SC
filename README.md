@@ -1,7 +1,6 @@
 # 中文语法语料库检索系统
 
-🔗 **在线访问**: https://YOUR_USERNAME.github.io/chinese-grammar-corpus/
-
+🔗 **在线访问**: https://wd-github-2017.github.io/ICLESC/
 ## 功能特点
 - 🏷️ 标签检索：通过T-tag字段检索对应的文本内容  
 - 🔍 智能搜索：支持直接输入标签号进行搜索
