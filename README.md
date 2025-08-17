@@ -9,7 +9,6 @@ International Chinese Language Education Sentence Corpus
 - 📱 移动友好：支持各种设备尺寸
 
 ## 数据来源
-- 国际中文教育中文水平等级标准·语法学习手册
 - 世界汉语教学数据集
 
 ## 使用方法
